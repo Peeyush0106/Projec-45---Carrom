@@ -82,6 +82,9 @@ function resetGame() {
     queenTxtTimerStart = false;
     recentQueenCapturedTurnNo = "not-captured";
     waitForQueenCover = false;
+console.log("Speed set to false");
+    shootBtn.hide();
+    speedSlider.hide();
 }
 
 function drawShapesAndPatternsOnBoard() {

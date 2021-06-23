@@ -29,7 +29,7 @@ function setup() {
     var aboutTxt = createElement("h2").html("About").position(35, 100).hide();
     var aboutInfo = createElement("p").attribute("class", "info").html("<i> This is a very popular game named carrom. <br> It is mainly about aiming on a point and acting according to it. <br> The aim and target of the person should be determined. <br> This game helps people be determined on their aims. <br> This game sends awareness amongst people <br> and tells an important story of </i> <strong> UNAWARENESS </strong> <i> <br> of their own motive. <br> <br> This game will be updated regularly to make sure that <br> there are no issues that the users are not facing. </i>").position(35, 150).hide();
     var doc_link = createElement("h2").html(" <a href='FAQs & About.html' target='_blank'> View Game Detail Document </a>").position(50, 470).hide();
-    var doc_link2 = createElement("h2").html(" <a href='Peeyush Agarwal - Project 43 - Answered - Project+Questionairre.html'> View Game Updates </a>").position(50, 520).hide();
+    var doc_link2 = createElement("h2").html(" <a href='Game Updates.html'> View Game Updates </a>").position(50, 520).hide();
     queenTxt = createElement("h3").position(40, 705).html("Come on, you just need a cover for the queen to be safe!!!").style("background-color", "green").hide();
     startButtons = [
         (createButton("About / How to play / Learnings").attribute("class", "button").position(150, 200).style("background-color", "red")).mousePressed(() => {

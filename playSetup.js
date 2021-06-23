@@ -3,8 +3,8 @@ console.group("Console group of logs");
 var mouse_pos = document.getElementById("mouse-pos");
 var coinDiameter = 25;
 
-var pocket_width_and_height, pockets, thickStripWidth, coins_pos, canvas, boardEdge,
-    thinStripWidth, coins, striker, striker2, strikerMove, ellipse_pos, haveToSetStriker, queen, music, edges, strip_pos, stopped_coins, thickBand, thinBand, whiteImg, blackImg, queenImg, strikerImg, strikerReady, pocket_pos, gameState, showOptions, points, queenInPocket, queenTxtTimer, queenTxt, coverNeed, turns, extraCoin, turnStarts, pointsAfterQueenCaptured, queenTxtTimerStart, recentQueenCapturedTurnNo, waitForQueenCover;
+var pocket_width_and_height, pockets, thickStripWidth, coins_pos, canvas, boardEdge, selectedSpeed,
+    thinStripWidth, coins, striker, striker2, strikerMove, ellipse_pos, haveToSetStriker, queen, music, edges, strip_pos, stopped_coins, thickBand, thinBand, whiteImg, blackImg, queenImg, strikerImg, strikerReady, pocket_pos, gameState, showOptions, points, queenInPocket, queenTxtTimer, queenTxt, coverNeed, turns, extraCoin, turnStarts, pointsAfterQueenCaptured, queenTxtTimerStart, recentQueenCapturedTurnNo, waitForQueenCover, shootBtn, speedSlider;
 
 function setStriker() {
     if (!striker.isTouching(pockets)) {
@@ -135,15 +135,8 @@ function startGame() {
         spr.friction = 0.065;
         spr.points = 20;
     }
-    extraCoin = createSprite(10, 60, coinDiameter, coinDiameter);
-    extraCoin.addImage(whiteImg);
-    extraCoin.restitution = 0.5;
-    extraCoin.setCollider("circle", 0, 0, 12);
-    extraCoin.friction = 0.065;
-    extraCoin.points = 20;
-    coins.add(extraCoin);
 
-    queen = createSprite(590, 85, coinDiameter, coinDiameter);
+    queen = createSprite(300, 300, coinDiameter, coinDiameter);
     queen.addImage(queenImg);
     coins.add(queen);
     queen.restitution = 0.5;
@@ -151,7 +144,7 @@ function startGame() {
     queen.name = "queen";
     queen.setCollider("circle", 0, 0, 12);
     queen.friction = 0.055;
-    // strikerImg.width = 5;
+
     ellipse_pos = {
         x: [0, 0, 600, 600,
             300,
@@ -176,4 +169,16 @@ function startGame() {
     thinBand = createSprite(300, 660, 438, 5);
     thinBand.shapeColor = "black";
     thinBand.depth = -1;
+
+    shootBtn = createButton("Shoot").attribute("class", "button").style("width", "80px").style("height", "50px").style("font-size", "20px").style("background-color", "red").position(270, 730).mousePressed(() => {
+        if (strikerReady) {
+            strikerReady = false;
+            striker.setSpeedAndDirection(30);
+            turns += 1;
+        }
+    });
+    speedSlider = createSlider(0, 55, 20).position(127.5, 742.5).changed(() => {
+        selectedSpeed = speedSlider.value();
+    });
+    selectedSpeed = speedSlider.value();
 }

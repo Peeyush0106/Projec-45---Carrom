@@ -31,9 +31,10 @@ function draw() {
         if (strikerReady) {
             striker.x = striker2.x;
             striker2.pointTo(mouseX, mouseY);
+            distanceBetweenStrikerAndMouse = dist(mouseX, mouseY, striker2.x, striker2.y)
             if (mouseDown()) {
                 striker.pointTo(mouseX, mouseY);
-                if (dist(mouseX, mouseY, striker2.x, striker2.y) < striker2.width && striker2.x <= 500 && striker2.x >= 100) striker2.x = mouseX;
+                if (distanceBetweenStrikerAndMouse < striker2.width && striker2.x <= 500 && striker2.x >= 100) striker2.x = mouseX;
             }
             if (striker.x <= 497 && (keyDown("right") || keyDown("d"))) {
                 striker.x = striker.x + 3;
@@ -44,17 +45,17 @@ function draw() {
             }
             if (keyDown("enter")) {
                 strikerReady = false;
-                striker.setSpeedAndDirection(30);
+                striker.setSpeedAndDirection(selectedSpeed);
                 turns += 1;
             }
+            if (striker2.x > 464) {
+                striker2.x = 500;
+            }
+            if (striker2.x < 136) {
+                striker2.x = 100;
+            }
         }
-        else striker2.pointTo(striker.x, striker.y);
-        if (striker2.x > 464) {
-            striker2.x = 500;
-        }
-        if (striker2.x < 136) {
-            striker2.x = 100;
-        }
+        if (!strikerReady) striker2.pointTo(striker.x, striker.y);
 
         if (Math.round(Math.abs(striker.velocity.x)) <= 0.65
             && Math.round(Math.abs(striker.velocity.y)) <= 0.65
@@ -82,6 +83,15 @@ function draw() {
         }
 
         drawSprites();
+
+        if (gameState === 1) {
+            push();
+            noFill();
+            stroke("black");
+            strokeWeight(3);
+            rect(115, 675, 357.5 - 115, 735 - 675);
+            pop();
+        }
 
         if (coins.length === 0) {
             gameWin();
@@ -130,9 +140,6 @@ function draw() {
                 }
                 waitForQueenCover = false;
             }
-        }
-        if (!strikerReady) {
-            // queenTxt.hide();
         }
     }
     continueQueenTimerUntilOverIfToDo();

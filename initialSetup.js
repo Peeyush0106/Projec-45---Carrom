@@ -1,3 +1,5 @@
+var plrName, plrNameAlreadyTaken, nameText, pwdText, playersEntered, playerCount, playCliked, playerData, passwordStatus, login, loginAndPlay, gameStarted, waitingTxt, nameChecked, cancelAllCommands;
+
 function preload() {
     // music = loadSound("Favorite-Audio.mp3");
     whiteImg = loadImage("images/whitepiece.png");
@@ -9,9 +11,12 @@ function preload() {
 function setup() {
     canvas = createCanvas(600, 750);
     // music.play();
+    // Database setup
+    database = firebase.database();
     strikerReady = true;
     points = "not-initialized";
     gameState = 0;
+    playerCount = 0;
     // Game state legend - 0 = Home screen || 1 = Playing || 2 = Player 1 won || 3 = Player2 won
     showOptions = {
         currentOpt: 0,
@@ -40,6 +45,9 @@ function setup() {
             aboutInfo.show();
             doc_link.show();
             doc_link2.show();
+            inputName.hide();
+            nameText.hide();
+            continueBtn.hide();
         }),
         (createButton("Play").attribute("class", "button").position(150, 335).style("background-color", "blue").mousePressed(() => {
             startButtons[0].hide();
@@ -51,15 +59,17 @@ function setup() {
             gameState = 1;
             startGame();
             startButtons[3].show();
-        })),
+        })).hide(),
         (createButton("<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Back_Arrow.svg/1200px-Back_Arrow.svg.png' draggable=false width='50' height='50'/>").attribute("class", "button").style("width", "50px").style("height", "50px").style("background-color", rgb(255, 250, 220)).position(520, 690).mousePressed(() => {
             startButtons[0].show();
-            startButtons[1].show();
             startButtons[2].hide();
             aboutTxt.hide();
             aboutInfo.hide();
             doc_link.hide();
             doc_link2.hide();
+            inputName.show();
+            nameText.show();
+            continueBtn.show();
         }).hide()),
         (createButton("<img src='images/menu.png' draggable=false width='50' height='50'/>").attribute("class", "button").style("width", "50px").style("background-color", rgb(155, 210, 220)).style("height", "50px").position(545, 710).mousePressed(() => {
             showOptions.showButtons();
@@ -70,8 +80,26 @@ function setup() {
         (createButton("New Game").attribute("class", "button").style("width", "140px").style("height", "50px").style("font-size", "20px").style("background-color", "red").position(465, 580).mousePressed(() => {
             resetGame(aboutTxt, aboutInfo, doc_link, doc_link2);
         }).hide()),
-        (createButton("Cancel").attribute("class", "button").style("width", "140px").style("height", "50px").style("font-size", "20px").style("background-color", "red").position(465, 520).mousePressed(() => {
-            showOptions.hideButtons();
+        (createButton("Sign Out").attribute("class", "button").style("width", "140px").style("height", "50px").style("font-size", "20px").style("background-color", "red").position(465, 520).mousePressed(() => {
+            location.reload();
         }).hide()),
+        (createButton("Cancel").attribute("class", "button").style("width", "140px").style("height", "50px").style("font-size", "20px").style("background-color", "red").position(465, 460).mousePressed(() => {
+            showOptions.hideButtons();
+        }).hide())
     ];
+    inputName = createInput("").attribute("type", "text").attribute("onkeydown", "return alphaOnly(event);").size(80).attribute("maxlength", 10).position(325, 360).style("background-color", "yellow").attribute("onkeydown", "return alphaOnly(event);").size(80).attribute("maxlength", 20);
+    nameText = createElement("h2").position(100, 335).html("Your gaming name: ");
+    continueBtn = createButton("Continue").style("color", "white").style("background-color", "green").position(417.5, 360).mousePressed(() => {
+        if (inputName.value() !== "") {
+            inputName.hide();
+            nameText.hide();
+            continueBtn.hide();
+            startButtons[1].show();
+            notify("Welcome, " + inputName.value());
+        }
+        else {
+            alert("Please enter a valid name to continue..");
+            notify("Please enter a valid name to continue..");
+        }
+    });
 }

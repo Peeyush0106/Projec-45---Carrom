@@ -179,6 +179,7 @@ function startGame() {
     });
     speedSlider = createSlider(0, 55, 20).position(127.5, 742.5).changed(() => {
         selectedSpeed = speedSlider.value();
+        console.log("Changing speed");
     });
     selectedSpeed = speedSlider.value();
 }

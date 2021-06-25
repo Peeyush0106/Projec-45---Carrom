@@ -7,12 +7,14 @@ function draw() {
         startButtons[4].show();
         startButtons[5].show();
         startButtons[6].show();
+        startButtons[7].show();
         showOptions.goNeutral();
     }
     if (showOptions.currentOpt === -1) {
         startButtons[4].hide();
         startButtons[5].hide();
         startButtons[6].hide();
+        startButtons[7].hide();
         showOptions.goNeutral();
     }
     if (gameState === 0) queenTxt.hide();
@@ -33,7 +35,9 @@ function draw() {
             striker2.pointTo(mouseX, mouseY);
             distanceBetweenStrikerAndMouse = dist(mouseX, mouseY, striker2.x, striker2.y)
             if (mouseDown()) {
-                striker.pointTo(mouseX, mouseY);
+                if (mouseY < 600) {
+                    striker.pointTo(mouseX, mouseY);
+                }
                 if (distanceBetweenStrikerAndMouse < striker2.width && striker2.x <= 500 && striker2.x >= 100) striker2.x = mouseX;
             }
             if (striker.x <= 497 && (keyDown("right") || keyDown("d"))) {
@@ -141,6 +145,22 @@ function draw() {
                 waitForQueenCover = false;
             }
         }
+    }
+    if (nameChecked) {
+        if (plrNameAlreadyTaken) {
+            alert("Name already taken, choose another one");
+            location.reload();
+        } else {
+            // Create new account and start playing
+            startGame();
+            updatePassword(plrName);
+        }
+        nameChecked = false;
+    }
+    // Check the password status
+    if (passwordStatus === 1) {
+        startGame();
+        passwordStatus = 0;
     }
     continueQueenTimerUntilOverIfToDo();
 }

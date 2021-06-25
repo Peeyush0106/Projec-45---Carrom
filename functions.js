@@ -82,7 +82,7 @@ function resetGame() {
     queenTxtTimerStart = false;
     recentQueenCapturedTurnNo = "not-captured";
     waitForQueenCover = false;
-console.log("Speed set to false");
+    console.log("Speed set to false");
     shootBtn.hide();
     speedSlider.hide();
 }
@@ -173,4 +173,27 @@ function drawShapesAndPatternsOnBoard() {
     }
     pop();
     pop();
+}
+
+async function updatePassword(name) {
+    await database.ref(("Accounts/" + name)).update({
+        password: inputPassword.value(),
+    });
+}
+
+// Allow only alphabets in the name
+function alphaOnly(event) {
+    var key;
+    if (window.event) {
+        key = window.event.key;
+    }
+    else if (e) {
+        key = e.which;
+    }
+    var key = event.keyCode;
+    return ((key >= 65 && key <= 90) || (key >= 95 && key <= 122) || key === 8 || key === 46 || (key >= 37 && key <= 40) || (key >= 35 && key <= 36));
+}
+
+function notify(_data) {
+
 }

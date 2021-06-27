@@ -4,7 +4,7 @@ function draw() {
         updateStatus();
     }
     if (points != "not-initialized") mouse_pos.innerText = "Turns: " + turns + " || Score: " + points + " || MouseX: " + mouseX + " || MouseY: " + mouseY;
-    else mouse_pos.innerText = "MouseX: " + mouseX + " || MouseY: " + mouseY;
+    // else mouse_pos.innerText = "MouseX: " + mouseX + " || MouseY: " + mouseY;
 
     if (!checkedAnEnterStatement) {
         if (!gameStarted && !loggedIn && keyDown("enter")) {

@@ -31,6 +31,7 @@ function destroyCoins() {
             }
             else {
                 queenInPocket = true;
+                notify("Come on, you just need a cover for the queen to be safe!!!", "black", "yellow");
                 recentQueenCapturedTurnNo = turns;
                 pointsAfterQueenCaptured = points;
             }
@@ -75,13 +76,14 @@ function resetGame() {
     queenInPocket = false;
     queenTxtTimer = 3 * 30;
     queenTxt.html("Come on, you just need a cover for the queen to be safe!!!");
-    coverNeed = false;
     turns = 0;
-    turnStarts = 1;
+    turnStarts = 0;
     pointsAfterQueenCaptured = "not-captured";
     queenTxtTimerStart = false;
     recentQueenCapturedTurnNo = "not-captured";
     waitForQueenCover = false;
+    gameStarted = false;
+    loggedIn = true;
     console.log("Speed set to false");
     shootBtn.hide();
     speedSlider.hide();
@@ -175,12 +177,6 @@ function drawShapesAndPatternsOnBoard() {
     pop();
 }
 
-async function updatePassword(name) {
-    await database.ref(("Accounts/" + name)).update({
-        password: inputPassword.value(),
-    });
-}
-
 // Allow only alphabets in the name
 function alphaOnly(event) {
     var key;
@@ -194,6 +190,68 @@ function alphaOnly(event) {
     return ((key >= 65 && key <= 90) || (key >= 95 && key <= 122) || key === 8 || key === 46 || (key >= 37 && key <= 40) || (key >= 35 && key <= 36));
 }
 
-function notify(_data) {
+function notify(_data, _color, _bgcolor) {
+    notification.html(_data);
+    if (_color) {
+        notification.style("color", _color);
+    }
+    if (_bgcolor) {
+        notification.style("background-color", _bgcolor);
+    }
+    notification.show();
+    notificationTime = 3 * 30;
+    notifyTimeStarted = true;
+    notifyCountDownContinue();
+}
 
+function notifyCountDownContinue() {
+    notificationTime -= 1;
+}
+
+function continueGame() {
+    if (inputName.value() !== "") {
+        inputName.hide();
+        nameText.hide();
+        continueBtn.hide();
+        startButtons[1].show();
+        notify("Welcome, " + inputName.value(), "yellow", "green");
+        loggedIn = true;
+        plrName = inputName.value()
+    }
+    else {
+        notify("Please enter a valid name to continue..", "red", "blue");
+    }
+}
+
+function startPlaying() {
+    startButtons[0].hide();
+    startButtons[1].hide();
+    for (const i in arguments) {
+        const elt = arguments[i];
+        elt.hide();
+    }
+    gameState = 1;
+    startButtons[3].show();
+    gameStarted = true;
+}
+
+function shoot() {
+    strikerReady = false;
+    striker.setSpeedAndDirection(selectedSpeed);
+    turns += 1;
+    checkedAnEnterStatement = true;
+    strikerState = "not-moving";
+}
+
+function updateStatus() {
+    database.ref("Playing/" + plrName).update({
+        score: points
+    });
+}
+
+function mousePressedOnStriker2() {
+    distanceBetweenStrikerAndMouse = dist(mouseX, mouseY, striker2.x, striker2.y)
+    if (mouseDown() && striker2.x <= 500 && striker2.x >= 100) {
+        return (distanceBetweenStrikerAndMouse < striker2.width && striker2.x <= 500 && striker2.x >= 100);
+    }
 }

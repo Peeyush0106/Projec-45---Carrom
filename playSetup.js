@@ -4,13 +4,13 @@ var mouse_pos = document.getElementById("mouse-pos");
 var coinDiameter = 25;
 
 var pocket_width_and_height, pockets, thickStripWidth, coins_pos, canvas, boardEdge, selectedSpeed,
-    thinStripWidth, coins, striker, striker2, strikerMove, ellipse_pos, haveToSetStriker, queen, music, edges, strip_pos, stopped_coins, thickBand, thinBand, whiteImg, blackImg, queenImg, strikerImg, strikerReady, pocket_pos, gameState, showOptions, points, queenInPocket, queenTxtTimer, queenTxt, coverNeed, turns, extraCoin, turnStarts, pointsAfterQueenCaptured, queenTxtTimerStart, recentQueenCapturedTurnNo, waitForQueenCover, shootBtn, speedSlider;
+    thinStripWidth, coins, striker, striker2, strikerMove, ellipse_pos, haveToSetStriker, queen, music, edges, strip_pos, stopped_coins, thickBand, thinBand, whiteImg, blackImg, queenImg, strikerImg, strikerReady, pocket_pos, gameState, showOptions, points, queenInPocket, strikerStateChecked, queenTxtTimer, queenTxt, turns, extraCoin, turnStarts, pointsAfterQueenCaptured, strikerState, queenTxtTimerStart, recentQueenCapturedTurnNo, waitForQueenCover, shootBtn, speedSlider;
 
 function setStriker() {
-    if (!striker.isTouching(pockets)) {
-        turnStarts += 1;
-    }
+    // if (!striker.isTouching(pockets)) {
+    // }
 
+    turnStarts += 1;
     if (striker2 !== undefined) striker.x = striker2.x;
     else striker.x = 300;
     striker.y = 530;
@@ -29,10 +29,10 @@ function startGame() {
     recentQueenCapturedTurnNo = "not-captured";
     pointsAfterQueenCaptured = "not-captured";
     queenInPocket = false;
-    coverNeed = false;
     waitForQueenCover = false;
-    turnStarts = 1;
+    turnStarts = 0;
     queenTxtTimerStart = false;
+    strikerState = "not-moving";
     pockets = createGroup();
     pocket_pos = { x: [0, 600, 600, 0], y: [0, 0, 600, 600] };
     for (let i = 0; i < pocket_pos.x.length; i++) {
@@ -136,7 +136,7 @@ function startGame() {
         spr.points = 20;
     }
 
-    queen = createSprite(300, 300, coinDiameter, coinDiameter);
+    queen = createSprite(580, 90, coinDiameter, coinDiameter);
     queen.addImage(queenImg);
     coins.add(queen);
     queen.restitution = 0.5;
@@ -171,10 +171,8 @@ function startGame() {
     thinBand.depth = -1;
 
     shootBtn = createButton("Shoot").attribute("class", "button").style("width", "80px").style("height", "50px").style("font-size", "20px").style("background-color", "red").position(270, 730).mousePressed(() => {
-        if (strikerReady) {
-            strikerReady = false;
-            striker.setSpeedAndDirection(30);
-            turns += 1;
+        if (strikerReady && !mouseDown()) {
+            shoot();
         }
     });
     speedSlider = createSlider(0, 55, 20).position(127.5, 742.5).changed(() => {

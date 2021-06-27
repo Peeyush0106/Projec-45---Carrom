@@ -255,3 +255,14 @@ function mousePressedOnStriker2() {
         return (distanceBetweenStrikerAndMouse < striker2.width && striker2.x <= 500 && striker2.x >= 100);
     }
 }
+
+window.onbeforeunload = function () {
+    if (gameState !== "gettingStarted"
+        && gameState !== "over"
+        && gameState !== "win") {
+        playerCount -= 1;
+        updatePlayerCount(playerCount);
+        plrCntDecreased = true;
+        removeMeFromGame();
+    }
+}

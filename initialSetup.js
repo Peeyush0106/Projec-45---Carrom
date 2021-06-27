@@ -1,4 +1,4 @@
-var plrName, plrNameAlreadyTaken, nameText, pwdText, playersEntered, playerCount, playCliked, playerData, passwordStatus, login, loginAndPlay, loggedIn, gameStarted, waitingTxt, nameChecked, cancelAllCommands, checkedAnEnterStatement, notification, notificationTime, notifyTimeStarted;
+var plrName, plrNameAlreadyTaken, nameText, pwdText, playersEntered, playerCount, playCliked, cancelUploads, playerData, passwordStatus, login, loginAndPlay, loggedIn, gameStarted, waitingTxt, nameChecked, cancelAllCommands, checkedAnEnterStatement, notification, notificationTime, notifyTimeStarted;
 
 function preload() {
     // music = loadSound("Favorite-Audio.mp3");
@@ -20,6 +20,7 @@ function setup() {
     loggedIn = false;
     gameStarted = false;
     checkedAnEnterStatement = false;
+    cancelUploads = false;
     // Game state legend - 0 = Home screen || 1 = Playing || 2 = Player 1 won || 3 = Player2 won
     showOptions = {
         currentOpt: 0,

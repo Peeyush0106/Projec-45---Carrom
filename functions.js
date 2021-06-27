@@ -244,9 +244,11 @@ function shoot() {
 }
 
 function updateStatus() {
-    database.ref("Playing/" + plrName).update({
-        score: points
-    });
+    if (!cancelUploads) {
+        database.ref("Playing/" + plrName).update({
+            score: points
+        });
+    }
 }
 
 function mousePressedOnStriker2() {
@@ -257,12 +259,6 @@ function mousePressedOnStriker2() {
 }
 
 window.onbeforeunload = function () {
-    if (gameState !== "gettingStarted"
-        && gameState !== "over"
-        && gameState !== "win") {
-        playerCount -= 1;
-        updatePlayerCount(playerCount);
-        plrCntDecreased = true;
-        removeMeFromGame();
-    }
+    cancelUploads = true;
+    if (loggedIn) database.ref("Playing/" + plrName).remove();
 }
